@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 # 웹드라이버 설정 (ex. Chrome)
 #driver = webdriver.Chrome('C:/Users/hun/Downloads/chromedriver-win64chromedriver/chromedriver.exe')
