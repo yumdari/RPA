@@ -15,6 +15,7 @@ https://data.kma.go.kr/climate/windChill/selectWindChillChart.do
 
 ** Ta : 기온(°C), Tw : 습구온도(Stull의 추정식 이용), RH : 상대습도(%)
 ---------------------------------------------------------------------------
+
 """
 import math
 import os
@@ -44,6 +45,6 @@ Tw = calculate_tw(temp, humi)
 
 perv_temp = calculate_expression(Tw, temp)
 
-print("체감 온도는 ", round(perv_temp,2), "ºC입니다.")
+print("유라 6층 사무실 체감 온도는 ", round(perv_temp,2), "ºC입니다. 살려주세요")
 
 os.system("pause")
