@@ -9,8 +9,11 @@ chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome()
+
 driver.get('https://naver.com/')
 
 driver.find_element(By.XPATH, '//*[@id="account"]/div/a').click()
 
-time.sleep(1000)
+time.sleep(1)
+
+driver.close()
