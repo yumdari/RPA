@@ -8,7 +8,7 @@ driver = webdriver.Chrome()
 driver.get('https://www.naver.com/')
 
 # h1 태그 모두 찾기
-h1_tags = driver.find_elements(By.TAG_NAME,'div')
+h1_tags = driver.find_elements(By.TAG_NAME,'h1')
 for tag in h1_tags:
     print(tag.text)
 
