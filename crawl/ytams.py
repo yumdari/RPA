@@ -3,6 +3,7 @@ import time
 import signal
 import psutil
 import shutil
+import getpass  # 🔹 비밀번호 입력 시 화면에 노출되지 않도록 함
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -14,17 +15,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 import sys
 sys.stdout.reconfigure(line_buffering=True)
 
-# 🔹 ChromeDriver 실행 여부 확인
-chromedriver_path = shutil.which("chromedriver")
-
-#if chromedriver_path:
-#    print(f"✅ ChromeDriver 경로: {chromedriver_path}", flush=True)
-#else:
-#    print("❌ ChromeDriver를 찾을 수 없습니다. 설치를 확인하세요.", flush=True)
+# 🔹 사용자 입력 (ID & Password)
+user_id = input("📝 Enter your ID: ")
+user_pw = getpass.getpass("🔒 Enter your Password: ")  # 입력할 때 화면에 보이지 않음
 
 # 🔹 ChromeDriver 실행
 print("🔹 ChromeDriver 실행 중...", flush=True)
-service = Service("C:\chromedriver-win64\chromedriver.exe")
+service = Service("C:/chromedriver-win64/chromedriver.exe")  # 백슬래시 `\` 오류 방지를 위해 `/` 사용
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=service, options=options)
 
@@ -35,7 +32,7 @@ driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
 
 # 🔹 웹사이트 접속 (타임아웃 설정)
 print("🔹 웹사이트 접속 중...", flush=True)
-driver.set_page_load_timeout(10)  # 10초 안에 응답이 없으면 오류 발생
+driver.set_page_load_timeout(10)
 driver.get("http://ytams.yura.co.kr/")
 
 # 🔹 페이지 로딩 대기
@@ -67,8 +64,8 @@ except:
 
 # 🔹 JavaScript로 ID 및 Password 입력 (send_keys() 차단 방지)
 try:
-    driver.execute_script("arguments[0].value = 'userId';", id_input)
-    driver.execute_script("arguments[0].value = 'password';", pw_input)
+    driver.execute_script("arguments[0].value = arguments[1];", id_input, user_id)
+    driver.execute_script("arguments[0].value = arguments[1];", pw_input, user_pw)
     print("✅ ID와 비밀번호 입력 완료!")
 except:
     print("❌ ID 및 비밀번호 입력 실패!")
@@ -76,7 +73,6 @@ except:
 # 🔹 로그인 버튼 클릭 (JavaScript 방식)
 try:
     login_button = WebDriverWait(driver, 10).until(
-        #EC.element_to_be_clickable((By.Id, "compose"))
         EC.element_to_be_clickable((By.XPATH, '//*[@id="compose"]'))
     )
     driver.execute_script("arguments[0].click();", login_button)
