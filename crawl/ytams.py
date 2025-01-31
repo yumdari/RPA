@@ -3,7 +3,7 @@ import time
 import signal
 import psutil
 import shutil
-import getpass  # 🔹 비밀번호 입력 시 화면에 노출되지 않도록 함
+import getpass  # 🔹 비밀번호 입력 시 화면에 보이지 않도록 함
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -21,8 +21,9 @@ user_pw = getpass.getpass("🔒 Enter your Password: ")  # 입력할 때 화면�
 
 # 🔹 ChromeDriver 실행
 print("🔹 ChromeDriver 실행 중...", flush=True)
-service = Service("C:/chromedriver-win64/chromedriver.exe")  # 백슬래시 `\` 오류 방지를 위해 `/` 사용
+service = Service("C:/chromedriver-win64/chromedriver.exe")
 options = webdriver.ChromeOptions()
+options.add_argument("--start-maximized")  # 창을 최대화
 driver = webdriver.Chrome(service=service, options=options)
 
 # 🔹 Selenium 탐지 방지
@@ -79,6 +80,30 @@ try:
     print("✅ 로그인 버튼 클릭 완료!")
 except:
     print("❌ 로그인 버튼 클릭 실패!")
+
+# 🔹 로그인 후 페이지 로딩 대기
+print("🔹 로그인 후 페이지 로딩 대기 중...", flush=True)
+time.sleep(3)  # 페이지가 완전히 로드될 수 있도록 3초 대기
+
+# 🔹 첫 번째 메뉴 (`//*[@id="sidebarnav"]/li[3]/a`) 클릭
+try:
+    menu1 = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="sidebarnav"]/li[3]/a'))
+    )
+    driver.execute_script("arguments[0].click();", menu1)
+    print("✅ 첫 번째 메뉴 클릭 완료!")
+except:
+    print("❌ 첫 번째 메뉴 클릭 실패!")
+
+# 🔹 두 번째 메뉴 (`//*[@id="sidebarnav"]/li[3]/ul/li[1]/a`) 클릭
+try:
+    menu2 = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="sidebarnav"]/li[3]/ul/li[1]/a'))
+    )
+    driver.execute_script("arguments[0].click();", menu2)
+    print("✅ 두 번째 메뉴 클릭 완료!")
+except:
+    print("❌ 두 번째 메뉴 클릭 실패!")
 
 # 🔹 자동 종료 방지
 input("브라우저를 닫으려면 엔터를 누르세요...")
